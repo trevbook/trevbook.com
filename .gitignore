@@ -1,0 +1,14 @@
+node_modules/
+dist/
+coverage/
+.env
+.env.*
+!.env.example
+.DS_Store
+.sst/
+sst-env.d.ts
+.next/
+*.tsbuildinfo
+
+# Ignore my miscellaneous files
+trevor-misc/
