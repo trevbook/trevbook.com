@@ -32,13 +32,17 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
 
   return (
     <article>
-      <header className="mb-8">
+      <header className="mb-6">
         <h1 className="text-3xl font-bold">{frontmatter.title}</h1>
         <time className="mt-2 block text-sm italic text-muted-foreground">{frontmatter.date}</time>
       </header>
       {frontmatter.image && (
         // biome-ignore lint/performance/noImgElement: unoptimized S3 images per project constraints
-        <img src={frontmatter.image} alt="" className="mb-8 w-full rounded-lg" />
+        <img
+          src={frontmatter.image}
+          alt=""
+          className="mb-6 max-h-90 w-full rounded-lg object-cover"
+        />
       )}
       <div className="prose prose-neutral dark:prose-invert max-w-none">{content}</div>
     </article>

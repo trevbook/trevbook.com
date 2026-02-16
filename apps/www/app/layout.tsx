@@ -34,7 +34,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="mx-auto flex min-h-svh max-w-3xl flex-col px-6">
+          <div className="mx-auto flex min-h-svh max-w-5xl flex-col px-6">
             <header className="flex flex-col items-center gap-4 border-b border-border py-6 sm:flex-row sm:justify-between">
               <div className="text-center sm:text-left">
                 <Link href="/" className="text-2xl font-light tracking-wide text-foreground">
