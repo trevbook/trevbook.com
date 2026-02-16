@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { compileMDX } from "next-mdx-remote/rsc";
+import rehypeSlug from "rehype-slug";
 import { mdxComponents } from "@/lib/mdx-components";
 import type { PostFrontmatter } from "@/lib/posts";
 import { getPostSlugs, getPostSource } from "@/lib/posts";
@@ -20,7 +21,12 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
 
   const { content, frontmatter } = await compileMDX<PostFrontmatter>({
     source,
-    options: { parseFrontmatter: true },
+    options: {
+      parseFrontmatter: true,
+      mdxOptions: {
+        rehypePlugins: [rehypeSlug],
+      },
+    },
     components: mdxComponents,
   });
 
@@ -34,7 +40,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         // biome-ignore lint/performance/noImgElement: unoptimized S3 images per project constraints
         <img src={frontmatter.image} alt="" className="mb-8 w-full rounded-lg" />
       )}
-      <div className="prose prose-neutral max-w-none">{content}</div>
+      <div className="prose prose-neutral dark:prose-invert max-w-none">{content}</div>
     </article>
   );
 }

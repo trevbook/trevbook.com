@@ -1,6 +1,6 @@
 export default function About() {
   return (
-    <div className="prose prose-neutral max-w-none">
+    <div className="prose prose-neutral dark:prose-invert max-w-none">
       <h1>About</h1>
       <p>
         Hey, I'm Trevor! I'm interested in data science, artificial intelligence, programming,
