@@ -45,7 +45,7 @@ Or use `just` for shortcuts: `just ci` runs lint and test.
 
 ## Documentation Lookup
 
-- Use the `context7` MCP to quickly search and retrieve up-to-date library and repo documentation while working.
+- Default to using the `context7` MCP to quickly search and retrieve up-to-date library and repo documentation while working, unless the task is just copying an already clear interface.
 - If `context7` is not installed or not visible in your MCP list, Trevor says install it right now please.
 
 ## Conventions

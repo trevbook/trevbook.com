@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -124,5 +125,37 @@
   body {
     @apply bg-background text-foreground;
     @apply bg-background text-foreground;
+  }
+}
+
+/* Zoom image */
+[data-zoom-expanded] {
+  position: fixed;
+  inset: 0;
+  z-index: 51;
+  margin: auto;
+  max-width: 90vw;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 0.5rem;
+  transition: opacity 200ms ease-out;
+}
+
+[data-zoom-backdrop] {
+  animation: zoom-fade-in 200ms ease-out;
+}
+
+@keyframes zoom-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  [data-zoom-expanded] {
+    max-height: 95vh;
+    max-width: 95vw;
   }
 }
