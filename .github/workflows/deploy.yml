@@ -3,6 +3,10 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - ".claude/**"
+      - "README.md"
+      - "CLAUDE.md"
   workflow_dispatch:
 
 permissions:
