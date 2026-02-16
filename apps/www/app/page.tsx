@@ -10,7 +10,10 @@ export default function Home() {
       {posts.map((post) => (
         <article key={post.slug} className="flex flex-col gap-4 sm:flex-row sm:gap-6">
           {post.frontmatter.image && (
-            <div className="shrink-0 overflow-hidden rounded-lg sm:w-48">
+            <Link
+              href={`/blog/${post.slug}`}
+              className="shrink-0 overflow-hidden rounded-lg sm:w-48"
+            >
               <Image
                 src={post.frontmatter.image}
                 alt={post.frontmatter.title}
@@ -18,7 +21,7 @@ export default function Home() {
                 height={200}
                 className="aspect-video w-full object-cover"
               />
-            </div>
+            </Link>
           )}
           <div className="flex flex-col gap-1">
             <Link href={`/blog/${post.slug}`} className="group">
