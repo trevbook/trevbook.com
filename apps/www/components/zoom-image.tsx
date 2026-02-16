@@ -4,9 +4,11 @@ import { Maximize2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
-interface ZoomImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {}
+interface ZoomImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+  caption?: string;
+}
 
-export function ZoomImage({ src, alt, className, ...props }: ZoomImageProps) {
+export function ZoomImage({ src, alt, caption, className, ...props }: ZoomImageProps) {
   const [expanded, setExpanded] = useState(false);
   const [isLandscape, setIsLandscape] = useState(false);
   const [dimensions, setDimensions] = useState<{ width: number; height: number } | null>(null);
@@ -80,10 +82,9 @@ export function ZoomImage({ src, alt, className, ...props }: ZoomImageProps) {
           ref={imgRef}
           src={src}
           alt={alt || ""}
-          className={className}
+          className={`${className ?? ""} ${expanded ? "invisible" : ""}`}
           onLoad={handleLoad}
           draggable={false}
-          data-zoom-expanded={expanded || undefined}
           {...props}
         />
 
@@ -110,15 +111,32 @@ export function ZoomImage({ src, alt, className, ...props }: ZoomImageProps) {
         )}
       </span>
 
-      {/* Backdrop — portaled to body to avoid <div> inside <p> hydration error */}
+      {/* Expanded overlay — portaled to body */}
       {expanded &&
         createPortal(
           <div
-            className="fixed inset-0 z-50 bg-black/80"
+            className="zoom-overlay-enter fixed inset-0 z-50 flex cursor-zoom-out flex-col items-center justify-center bg-black/80 p-4"
             onClick={() => setExpanded(false)}
-            aria-hidden="true"
-            data-zoom-backdrop
-          />,
+            onKeyDown={(e) => {
+              if (e.key === "Escape") setExpanded(false);
+            }}
+            role="dialog"
+            aria-modal="true"
+            aria-label={alt ? `Expanded image: ${alt}` : "Expanded image"}
+          >
+            {/* biome-ignore lint/performance/noImgElement: portaled copy for zoom display */}
+            <img
+              src={src}
+              alt={alt || ""}
+              className={`${caption ? "max-h-[85vh]" : "max-h-[90vh]"} max-w-[90vw] rounded-lg object-contain`}
+              draggable={false}
+            />
+            {caption && (
+              <p className="mt-3 max-w-[80vw] px-4 text-center text-sm leading-relaxed text-white/90">
+                {caption}
+              </p>
+            )}
+          </div>,
           document.body,
         )}
     </>

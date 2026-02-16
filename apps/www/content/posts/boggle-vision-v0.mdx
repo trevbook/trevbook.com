@@ -22,11 +22,10 @@ Before diving into any development, I wanted to know: how proficient are today's
 
 Unfortunately, as of mid-2023, the publicly available vision-language models are ***not*** proficient enough for this task.
 
-![Bing Chat attempting to read a Boggle grid](https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/boggle-grid-letters.png)
-
-![Google Bard attempting to read a Boggle grid](https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/boggle-grid-analysis.png)
-
-*Bing and Bard both didn't fare too well.*
+<ImageCarousel caption="Bing and Bard both didn't fare too well.">
+  ![Bing Chat attempting to read a Boggle grid](https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/boggle-grid-letters.png)
+  ![Google Bard attempting to read a Boggle grid](https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/boggle-grid-analysis.png)
+</ImageCarousel>
 
 Realizing this, I decided that I'd need a more sophisticated approach. To get a sense of what was already out there, [I searched for "Boggle solver" on GitHub](https://github.com/search?q=boggle+solver+&type=repositories), hoping to find some inspiration. A good portion of the 800+ repos seemed to be fairly simple Boggle solvers: you specify the letters in your board, and an algorithm detects all of the possible words that can be found in the board.
 
@@ -50,13 +49,11 @@ The 3rd point - including board statistics - was especially something I was inte
 
 With these design goals in mind, I started working on plotting out the UI. I like trying to do this early on into the life cycle of the app - it helps me anticipate some of the different features I might want to add throughout the development process. In hindsight, I'm pretty happy with how close to the original vision the final app was.
 
-![Boggle Vision introductory screen wireframe](https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/boggle-vision-wireframe.png)
-
-![Boggle Vision board display mockup](https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/boggle-board-mockup.png)
-
-![Board controls design document](https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/board-controls-diagram.png)
-
-*A selection of screenshots from my initial app design document. The only functionality that didn't make it in in some form was the "Toggle Tile Rotation".*
+<ImageCarousel caption='A selection of screenshots from my initial app design document. The only functionality that didn&apos;t make it in in some form was the "Toggle Tile Rotation".'>
+  ![Boggle Vision introductory screen wireframe](https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/boggle-vision-wireframe.png)
+  ![Boggle Vision board display mockup](https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/boggle-board-mockup.png)
+  ![Board controls design document](https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/board-controls-diagram.png)
+</ImageCarousel>
 
 With a solid design in hand, I was able to start scoping out the backend infrastructure.
 
@@ -89,9 +86,11 @@ The first natural step for the Boggle Vision project: identifying the portion of
 
 Honestly, this part was a bit tedious, and I feel like I ended up with a solution that was somewhat over-engineered and a bit brittle… but it worked! 💪 In the future, I want to revisit something like this with an ML-based segmentation model; for now, though, the detection was lightweight enough to run on a small machine.
 
-![A high-level overview of the board detection steps](https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/boggle-processing-pipeline.png)
-
-*A high-level overview of the board detection steps.*
+<Figure
+  src="https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/boggle-processing-pipeline.png"
+  alt="A high-level overview of the board detection steps"
+  caption="A high-level overview of the board detection steps."
+/>
 
 ### Training a Letter Detection CNN
 
@@ -103,9 +102,11 @@ Once I had a reliable method for identifying images of letters from Boggle board
 
 As a part of the fun of training a custom model, I had to collect a bunch of training data:
 
-![An overview of the training data collection process](https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/preprocessing-pipeline-diagram.png)
-
-*An overview of my training data collection process.*
+<Figure
+  src="https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/preprocessing-pipeline-diagram.png"
+  alt="An overview of the training data collection process"
+  caption="An overview of my training data collection process."
+/>
 
 All in all, I ended up with about ~40,000 **`(letter_img, label)`** pairs, roughly evenly spread across the 32 different tiles. (Super Big Boggle contains "block" tiles, as well as a variety of 2-letter combos.) I rotated each tile image I extracted, so that I had enough data to "train in" some rotational invariance. From there, [it was as simple as training a CNN using Pytorch](https://github.com/trevbook/boggle-vision-v0/blob/888405ae96a852542e8366a1cd2064bcf7630af7/boggle-vision-prototyping/notebooks/05.%20Training%20a%20Letter%20Detection%20CNN.ipynb). After messing around with some hyperparameters for a bit, I had exactly what I needed: a highly accurate model for recognizing the letters from pictures.
 
@@ -113,9 +114,11 @@ All in all, I ended up with about ~40,000 **`(letter_img, label)`** pairs, rough
 
 Next up: determining all of the possible words that existed within a particular Boggle board. Actually solving the board was a surprisingly easy portion of this project. By creating a [trie](https://en.wikipedia.org/wiki/Trie) - a graph whose edges represent characters that're additively concatenated to form nodes - we can "solve" a Boggle board by running DFS on all of the tiles. Here's a quick visual aide to help:
 
-![A visualization of a trie data structure](https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/word-tree-diagram.png)
-
-*A visualization of a trie data structure, as taken from Wikipedia.*
+<Figure
+  src="https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/word-tree-diagram.png"
+  alt="A visualization of a trie data structure"
+  caption="A visualization of a trie data structure, as taken from Wikipedia."
+/>
 
 Once you've created a trie from all of the "allowed words" (say: every word in the dictionary), then you can figure out all of the possible words by:
 
@@ -137,9 +140,11 @@ In order to determine how often certain words showed up, or what some of the lon
 
 I tried to visually incorporate the rarity of each word into the app by using RPG-style rarity color grading:
 
-![RPG-style word rarity visualization in Boggle Vision](https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/word-rarity-visualization.png)
-
-*I tried to incorporate the rarity of each word into the app wherever I could.*
+<Figure
+  src="https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/word-rarity-visualization.png"
+  alt="RPG-style word rarity visualization in Boggle Vision"
+  caption="I tried to incorporate the rarity of each word into the app wherever I could."
+/>
 
 ### User Interface
 
@@ -150,9 +155,11 @@ At this point, I'd gotten most of the backend pieces working, so it was time to 
 - **Board Stats:** This is a quick set of high-level stats about the currently shown board (like "total points available", "total words available", and "# of words of 8+ letters").
 - **Words Table:** This is a table of all of the different words viewable in the Boggle board
 
-![Comparison of original UI design vs actual UI](https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/ui-design-comparison.png)
-
-*The eventual UI was fairly similar to the original prototype I'd designed.*
+<Figure
+  src="https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/ui-design-comparison.png"
+  alt="Comparison of original UI design vs actual UI"
+  caption="The eventual UI was fairly similar to the original prototype I'd designed."
+/>
 
 ### Board Filters
 
@@ -163,9 +170,11 @@ I wanted to experiment with a couple of visual flourishes to make my Boggle app 
 
 After a bit of experimentation, I settled on the following visual filters:
 
-![An overview of the different visual filters available within Boggle Vision](https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/boggle-board-visualizations.png)
-
-*An overview of the different visual filters available within Boggle Vision.*
+<Figure
+  src="https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/boggle-board-visualizations.png"
+  alt="An overview of the different visual filters available within Boggle Vision"
+  caption="An overview of the different visual filters available within Boggle Vision."
+/>
 
 ### CI/CD
 
