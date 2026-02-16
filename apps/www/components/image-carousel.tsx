@@ -130,14 +130,14 @@ export function ImageCarousel({ caption, className, children }: ImageCarouselPro
 
   return (
     <>
-      <figure className={`not-prose my-8 ${className ?? ""}`}>
+      <figure className={`not-prose my-8 flex flex-col items-center ${className ?? ""}`}>
         <Carousel setApi={setApi} className="w-full">
           <CarouselContent>
             {images.map((image, index) => (
               <CarouselItem key={image.src}>
                 {/* biome-ignore lint/a11y/useSemanticElements: span with role="button" wraps clickable image */}
                 <span
-                  className="group relative inline-block cursor-zoom-in"
+                  className="group relative w-full cursor-zoom-in md:flex md:justify-center"
                   onClick={() => openZoom(index)}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
@@ -153,7 +153,7 @@ export function ImageCarousel({ caption, className, children }: ImageCarouselPro
                   <img
                     src={image.src}
                     alt={image.alt}
-                    className="w-full rounded-lg"
+                    className="w-full rounded-lg bg-white md:max-h-[50vh] md:w-auto md:max-w-full"
                     draggable={false}
                   />
                 </span>
@@ -204,7 +204,7 @@ export function ImageCarousel({ caption, className, children }: ImageCarouselPro
                       <img
                         src={image.src}
                         alt={image.alt}
-                        className={`${caption ? "max-h-[75vh]" : "max-h-[85vh]"} w-auto max-w-full rounded-lg object-contain`}
+                        className={`${caption ? "max-h-[75vh]" : "max-h-[85vh]"} w-auto max-w-full rounded-lg object-contain bg-white`}
                         draggable={false}
                       />
                     </CarouselItem>

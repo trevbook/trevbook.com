@@ -64,7 +64,7 @@ export function ZoomImage({ src, alt, caption, className, ...props }: ZoomImageP
     <>
       {/* biome-ignore lint/a11y/useSemanticElements: span with role="button" is appropriate for an image zoom trigger */}
       <span
-        className={`group relative inline-block ${expanded ? "cursor-zoom-out" : "cursor-zoom-in"}`}
+        className={`group relative block w-fit mx-auto rounded-lg ${expanded ? "cursor-zoom-out" : "cursor-zoom-in"}`}
         onClick={toggle}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
@@ -82,7 +82,7 @@ export function ZoomImage({ src, alt, caption, className, ...props }: ZoomImageP
           ref={imgRef}
           src={src}
           alt={alt || ""}
-          className={`${className ?? ""} ${expanded ? "invisible" : ""}`}
+          className={`bg-white rounded-lg md:max-h-[50vh] ${className ?? ""} ${expanded ? "invisible" : ""}`}
           onLoad={handleLoad}
           draggable={false}
           {...props}
@@ -128,7 +128,7 @@ export function ZoomImage({ src, alt, caption, className, ...props }: ZoomImageP
             <img
               src={src}
               alt={alt || ""}
-              className={`${caption ? "max-h-[85vh]" : "max-h-[90vh]"} max-w-[90vw] rounded-lg object-contain`}
+              className={`${caption ? "max-h-[85vh]" : "max-h-[90vh]"} max-w-[90vw] rounded-lg object-contain bg-white`}
               draggable={false}
             />
             {caption && (

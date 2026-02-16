@@ -16,6 +16,8 @@ This project was an attempt to create a tool that would help me answer those que
 
 In this retrospective report, I'll be outlining various details about the project's development. I'll probably continue to make maintenance updates and quality of life improvements to this app as time goes on, but I mean for this report to be a comprehensive summary of the development efforts that took place between the app's "initial development" (between June 2023 and December 2023).
 
+<TableOfContents />
+
 ## Related Work
 
 Before diving into any development, I wanted to know: how proficient are today's multimodal large language models (MLLMs) at doing this "Boggle board detection" task? If I could simply ask a model what letters are present in a Boggle board, then making this app would become a lot simpler.
@@ -59,8 +61,6 @@ With a solid design in hand, I was able to start scoping out the backend infrast
 
 ## Project Architecture
 
-> ***WARNING: "NERDY SECTION".*** ***Skip to the end of the post if you're not interested in the nitty-gritty details.***
-
 I've tried my best to create an overview of the entire architecture of the project below:
 
 ![A high-level overview of the Boggle Vision app architecture](https://trevbook-blog-assets.s3.us-east-1.amazonaws.com/pictures/boggle-vision-v0/system-architecture-diagram.png)
@@ -77,8 +77,6 @@ I've tried my best to create an overview of the entire architecture of the proje
 [**Backend Infrastructure:**](https://github.com/trevbook/boggle-vision-v0/tree/main/.github/workflows) A GCP Compute Engine VM that pulls the most latest Docker containers from a GCP Artifact Registry repo. The Docker containers are automatically built, pushed, and deployed via a pair of GitHub Actions CI/CD scripts.
 
 ## Development Details & Challenges
-
-> ***WARNING: "NERDY SECTION".*** ***Skip to the end of the post if you're not interested in the nitty-gritty details.***
 
 ### Board Detection
 
@@ -189,8 +187,6 @@ With the backend and frontend completed, I wanted to enable some rapid deploymen
 Overall, while it took me a while to figure out, it did the trick! For future projects, I want to investigate more automated options within GCP, like [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine?hl=en).
 
 ## Lessons Learned
-
-> ***WARNING: "NERDY SECTION".*** ***Skip to the end of the post if you're not interested in the nitty-gritty details.***
 
 While working professionally, I've learned a lot about developing across different sections of the stack. Despite this experience from my career, though, I'd never solely orchestrated the design and development of a full webapp. Boggle Vision has been that for me. By navigating the development across backend, frontend, and deployment, I feel like I've unlocked a superpower of sorts: I can easily create little tools that augment my life in fun ways. That's been, by and large, my favorite lesson from the development of this app.
 
